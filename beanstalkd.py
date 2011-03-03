@@ -1,7 +1,11 @@
 #!/usr/bin/python
 
-import sys
-from beanstalk import serverconn
+import sys, re
+from beanstalk import serverconn, protohandler
+
+# Temporary workaround until my patch is merged.
+if not protohandler._namematch.match('ABZDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-+/;.$_()'):
+    protohandler._namematch = re.compile(r'^[a-zA-Z0-9+\(\)/;.$_][a-zA-Z0-9+\(\)/;.$_-]{0,199}$')
 
 STATES = ['ready', 'reserved', 'urgent', 'delayed', 'buried']
 
@@ -14,14 +18,6 @@ def config():
     print_config(tubes)
 
 def print_config(tubes, graph_title='Beanstalkd jobs', graph_vlabel='count'):
-    print 'multigraph job_count'
-    print 'graph_order ' + ' '.join(STATES)
-    print 'graph_title ' + graph_title
-    print 'graph_vlabel ' + graph_vlabel
-    for state in STATES:
-        print '%s.label %s' % (state, state,)
-    print
-
     for tube in tubes:
         print 'multigraph job_count_' + tube
         print 'graph_title %s (%s)' % (graph_title, tube,)
