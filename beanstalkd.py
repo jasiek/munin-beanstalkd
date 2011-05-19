@@ -4,7 +4,7 @@ import sys, re
 from beanstalk import serverconn, protohandler
 
 # Temporary workaround until my patch is merged.
-if not protohandler._namematch.match('ABZDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-+/;.$_()'):
+if not protohandler._namematch.match('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-+/;.$_()'):
     protohandler._namematch = re.compile(r'^[a-zA-Z0-9+\(\)/;.$_][a-zA-Z0-9+\(\)/;.$_-]{0,199}$')
 
 STATES = ['ready', 'reserved', 'urgent', 'delayed', 'buried']
